@@ -306,12 +306,16 @@ def limpa_e_calcula(liga,ano):
         st.title('Estatísticas por mando')
 
         builder = GridOptionsBuilder.from_dataframe(stats1)
-        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '12px'},
+        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '10px'},
                                          wrapHeaderText=True,
                                          filterable=False,
                                          editable=False,
                                          sortable=False,
                                          resizable=False)
+        builder.configure_column("0.5 (%)",
+                                 cellStyle={'color': 'black', 'font-size': '10px'},
+                                 width=10,
+                                 editable=False)
 
         go = builder.build()
 
@@ -322,7 +326,7 @@ def limpa_e_calcula(liga,ano):
 
         st.title('Estatísticas por time')
         builder = GridOptionsBuilder.from_dataframe(stats2)
-        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '12px'},
+        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '10px'},
                                          wrapHeaderText=True,
                                          filterable=False,
                                          editable=False,
