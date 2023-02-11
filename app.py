@@ -318,23 +318,23 @@ def limpa_e_calcula(liga,ano):
                                  editable=False)        
         builder.configure_column("CLUBE",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=100,
+                                 width=70,
                                  editable=False)
         builder.configure_column("0.5",
                                  cellStyle={'color': 'black', 'font-size': '10px'},
-                                 width=50,
+                                 width=30,
                                  editable=False)
         builder.configure_column("1.5",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=50,
+                                 width=30,
                                  editable=False)
         builder.configure_column("2.5",
                                  cellStyle={'color': 'black', 'font-size': '10px'},
-                                 width=50,
+                                 width=30,
                                  editable=False)
         builder.configure_column("AM",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=50,
+                                 width=30,
                                  editable=False)        
         go = builder.build()
 
