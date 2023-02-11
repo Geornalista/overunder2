@@ -304,35 +304,35 @@ def limpa_e_calcula(liga,ano):
         stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
 
         st.title('Estatísticas por mando')
-
+        fontsize = '15px'
         builder = GridOptionsBuilder.from_dataframe(stats1)
-        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '10px'},
+        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
                                          filterable=False,
                                          editable=False,
                                          sortable=False,
                                          resizable=False)
         builder.configure_column(" ",
-                                 cellStyle={'color': 'black', 'font-size': '10px'},
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=30,
                                  editable=False)        
         builder.configure_column("CLUBE",
-                                 cellStyle={'color': 'red', 'font-size': '10px'},
+                                 cellStyle={'color': 'red', 'font-size': fontsize},
                                  width=50,
                                  editable=False)
         builder.configure_column("0.5",
-                                 cellStyle={'color': 'black', 'font-size': '10px'},
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=30,
                                  editable=False)
         builder.configure_column("1.5",
-                                 cellStyle={'color': 'red', 'font-size': '10px'},
+                                 cellStyle={'color': 'red', 'font-size': fontsize},
                                  width=30,
                                  editable=False)
         builder.configure_column("2.5",
-                                 cellStyle={'color': 'black', 'font-size': '10px'},
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=30,
                                  editable=False)
         builder.configure_column("AM",
-                                 cellStyle={'color': 'red', 'font-size': '10px'},
+                                 cellStyle={'color': 'red', 'font-size': fontsize},
                                  width=30,
                                  editable=False)        
         go = builder.build()
