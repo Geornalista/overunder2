@@ -292,10 +292,10 @@ def limpa_e_calcula(liga,ano):
     stats2.append(['MÉDIA',round((taxa_cg_o05+taxa_fg_o05)/2),round((taxa_cg_o15+taxa_fg_o15)/2),
                           round((taxa_cg_o25+taxa_fg_o25)/2),round((taxa_amg_c+taxa_amg_f)/2)])
     
-    stats1 = pd.DataFrame(stats1, columns=['CLUBE','0.5 (%)','1.5 (%)','2.5 (%)','AM (%)'],
+    stats1 = pd.DataFrame(stats1, columns=['CLUBE','0.5','1.5','2.5','AM'],
                 index=['Mandante','Visitante','MÉDIA'])
 
-    stats2 = pd.DataFrame(stats2, columns=['CLUBE','0.5 (%)','1.5 (%)','2.5 (%)','AM (%)'],
+    stats2 = pd.DataFrame(stats2, columns=['CLUBE','0.5','1.5','2.5','AM'],
                 index=['','','MÉDIA'])
     with tab1:
         stats1.reset_index(inplace=True)
@@ -312,21 +312,25 @@ def limpa_e_calcula(liga,ano):
                                          editable=False,
                                          sortable=False,
                                          resizable=False)
-        builder.configure_column("0.5 (%)",
+        builder.configure_column("CLUBE",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=30,
+                                 width=100,
                                  editable=False)
-        builder.configure_column("1.5 (%)",
-                                 cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=30,
+        builder.configure_column("0.5",
+                                 cellStyle={'color': 'black', 'font-size': '10px'},
+                                 width=50,
                                  editable=False)
-        builder.configure_column("2.5 (%)",
+        builder.configure_column("1.5",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=30,
+                                 width=50,
                                  editable=False)
-        builder.configure_column("AM (%)",
+        builder.configure_column("2.5",
+                                 cellStyle={'color': 'black', 'font-size': '10px'},
+                                 width=50,
+                                 editable=False)
+        builder.configure_column("AM",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=30,
+                                 width=50,
                                  editable=False)        
         go = builder.build()
 
