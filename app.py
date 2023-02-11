@@ -298,10 +298,10 @@ def limpa_e_calcula(liga,ano):
     stats2 = pd.DataFrame(stats2, columns=['CLUBE','0.5','1.5','2.5','AM'],
                 index=['','','MÉDIA'])
     with tab1:
-        stats1.reset_index(inplace=True)
-        stats2.reset_index(inplace=True)
-        stats1.rename(columns={ stats1.columns[0]: " " }, inplace = True)
-        stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
+        #stats1.reset_index(inplace=True)
+        #stats2.reset_index(inplace=True)
+        #stats1.rename(columns={ stats1.columns[0]: " " }, inplace = True)
+        #stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
 
         st.title('Aproveitamento por mando (%)')
         
@@ -309,11 +309,11 @@ def limpa_e_calcula(liga,ano):
         
         fontsize = '15px'
         builder = GridOptionsBuilder.from_dataframe(stats1)
-        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
-                                         filterable=False,
-                                         editable=False,
-                                         sortable=False,
-                                         resizable=False)
+        #builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
+        #                                 filterable=False,
+        #                                 editable=False,
+        #                                 sortable=False,
+        #                                 resizable=False)
         builder.configure_column(" ",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=30,
