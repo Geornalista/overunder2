@@ -303,7 +303,10 @@ def limpa_e_calcula(liga,ano):
         stats1.rename(columns={ stats1.columns[0]: " " }, inplace = True)
         stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
 
-        st.title('Estatísticas por mando')
+        st.title('Aproveitamento por mando (%)')
+        
+        st.dataframe(stats1)
+        
         fontsize = '15px'
         builder = GridOptionsBuilder.from_dataframe(stats1)
         builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
@@ -342,7 +345,10 @@ def limpa_e_calcula(liga,ano):
         theme="alpine",
         columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
 
-        st.title('Estatísticas por time')
+        st.title('Aproveitamento por time (%)')
+        
+        st.dataframe(stats2)
+        
         builder = GridOptionsBuilder.from_dataframe(stats2)
         builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '10px'},
                                          wrapHeaderText=True,
