@@ -312,9 +312,7 @@ def limpa_e_calcula(liga,ano):
 
         AgGrid(stats1,gridOptions = go,
         fit_columns_on_grid_load=True,
-        theme="alpine",
-        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-        allow_unsafe_jscode=True)
+        theme="alpine")
 
         st.title('Estatísticas por time')
         builder = GridOptionsBuilder.from_dataframe(stats2)
@@ -324,9 +322,7 @@ def limpa_e_calcula(liga,ano):
 
         AgGrid(stats2,gridOptions = go,
         fit_columns_on_grid_load=True,
-        theme="alpine",
-        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-        allow_unsafe_jscode=True)
+        theme="alpine")
 
 def figura(df,casa,fora):
     fig, ax = plt.subplots(figsize=(3,3))
