@@ -3,6 +3,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
 import unidecode
+from st_aggrid import AgGrid, GridOptionsBuilder, JsCode,ColumnsAutoSizeMode
+
+st.set_page_config(
+  page_title='Favorito segundo as odds - BET365',
+  page_icon='⚽',
+  layout="wide")
+
+st.sidebar.header(
+    """
+    **LIGAS**
+
+    """
+)
+tab1,tab2 = st.tabs([
+                  "📊 ESTATÍSTICAS",
+                  "🥅 FAVORITOS"])
 
 def limpa_e_calcula(liga,ano):
     liga1 = ['alemanha','alemanha2','espanha','espanha2','franca','franca2',
@@ -10,6 +26,7 @@ def limpa_e_calcula(liga,ano):
             'turquia','grecia','escocia']
 
     liga = unidecode.unidecode(liga.lower())
+    
     if liga in liga1:
         if liga == 'alemanha':
             ligacod = 'D1'
@@ -193,8 +210,8 @@ def limpa_e_calcula(liga,ano):
                     ha='center', va='center',size=fs)
         
         fig.tight_layout(pad=3.0)
-
-        st.pyplot(fig)
+        with tab2:
+            st.pyplot(fig)
 
     # CALCULO DOS FAVORITOS ====================================
     df['FAV_H'] = df.apply(fav_h,axis=1)
@@ -239,29 +256,6 @@ def limpa_e_calcula(liga,ano):
     df_O5 = df.query('GOLS > 0.5')
     # JOGOS AMBAS MARCAM
     df_ambas = df.query('AMBAS == 1')
-
-    # tabela = []
-
-    # for clube in clubes:
-    #     if mando == 'CASA':
-    #         texto1 = 'Home == "'+clube+'"'
-    #     elif mando == 'FORA':
-    #         texto1 = 'Away == "'+clube+'"'
-    #     else:
-    #         texto1 = 'Home == "'+clube+'" | Away == "'+clube+'"'
-
-    #     if gols == 'Over 0.5':
-    #         dfover = df_O5
-    #     elif gols == 'Over 1.5':
-    #         dfover = df_O15
-    #     elif gols == 'Over 2.5':
-    #         dfover = df_O25
-    #     else:
-    #         dfover = df_ambas
-
-    #     taxa = 100 * (dfover.query(texto1).shape[0] / df.query(texto1).shape[0])
-
-    #     tabela.append([clube,round(taxa,2)])
     
     stats1 = []
     stats2 = []
@@ -297,21 +291,42 @@ def limpa_e_calcula(liga,ano):
     stats2.append([fora,round(taxa_fg_o05),round(taxa_fg_o15),round(taxa_fg_o25),round(taxa_amg_f)])
     stats2.append(['MÉDIA',round((taxa_cg_o05+taxa_fg_o05)/2),round((taxa_cg_o15+taxa_fg_o15)/2),
                           round((taxa_cg_o25+taxa_fg_o25)/2),round((taxa_amg_c+taxa_amg_f)/2)])
-
-    #tabela = pd.DataFrame(tabela, columns=['CLUBE','TAXA'])
     
     stats1 = pd.DataFrame(stats1, columns=['CLUBE','0.5 (%)','1.5 (%)','2.5 (%)','AM (%)'],
                 index=['Mandante','Visitante','MÉDIA'])
 
     stats2 = pd.DataFrame(stats2, columns=['CLUBE','0.5 (%)','1.5 (%)','2.5 (%)','AM (%)'],
                 index=['','','MÉDIA'])
-    
-    st.title('Estatísticas por mando')
-    st.dataframe(stats1)
-    st.title('Estatísticas por time')
-    st.dataframe(stats2)
+    with tab1:
+        stats1.reset_index(inplace=True)
+        stats2.reset_index(inplace=True)
+        stats1.rename(columns={ stats1.columns[0]: " " }, inplace = True)
+        stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
 
-    #return tabela,casa,fora
+        st.title('Estatísticas por mando')
+
+        builder = GridOptionsBuilder.from_dataframe(stats1)
+        builder.configure_default_column(filterable=False,editable=False,sortable=False,resizable=False)
+
+        go = builder.build()
+
+        AgGrid(stats1,gridOptions = go,
+        fit_columns_on_grid_load=False,
+        theme="alpine",
+        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+        allow_unsafe_jscode=True)
+
+        st.title('Estatísticas por time')
+        builder = GridOptionsBuilder.from_dataframe(stats2)
+        builder.configure_default_column(filterable=False,editable=False,sortable=False,resizable=False)
+
+        go = builder.build()
+
+        AgGrid(stats2,gridOptions = go,
+        fit_columns_on_grid_load=False,
+        theme="alpine",
+        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+        allow_unsafe_jscode=True)
 
 def figura(df,casa,fora):
     fig, ax = plt.subplots(figsize=(3,3))
@@ -342,7 +357,8 @@ def figura(df,casa,fora):
 
     plt.xticks(np.arange(0, 110, 10))
 
-    st.pyplot(fig)
+    with tab2:
+        st.pyplot(fig)
 
 ligas = ["Alemanha","Alemanha2",
         "Espanha","Espanha2",
@@ -355,19 +371,8 @@ ligas = ["Alemanha","Alemanha2",
         "Suiça","Suécia",
         "Escócia","Brasil",]
 
-st.title("Favorito segundo as odds - BET365")
-
-st.sidebar.header("LIGA")
 liga = st.sidebar.selectbox('Escolha a liga', ligas)
 st.sidebar.header("TEMPORADA / ANO")
 ano = st.sidebar.selectbox('Temporada / Ano', ['2022/2023','2021/2022','2020/2021'])
 
-#mando = st.sidebar.radio('',['CASA','FORA','AMBOS'])
-#gols = st.sidebar.radio('',['Over 0.5','Over 1.5','Over 2.5','Ambas Marcam'])
-
 limpa_e_calcula(liga,ano)
-#df,casa,fora = limpa_e_calcula(dropdown)
-#figura(df,casa,fora)
-
-#st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
-#st.write('<style>div.st-bf{flex-direction:column;} div.st-ag{font-weight:bold;padding-left:2px;}</style>', unsafe_allow_html=True)
