@@ -313,10 +313,21 @@ def limpa_e_calcula(liga,ano):
                                          sortable=False,
                                          resizable=False)
         builder.configure_column("0.5 (%)",
-                                 cellStyle={'color': 'black', 'font-size': '10px'},
-                                 width=10,
+                                 cellStyle={'color': 'red', 'font-size': '10px'},
+                                 width=30,
                                  editable=False)
-
+        builder.configure_column("1.5 (%)",
+                                 cellStyle={'color': 'red', 'font-size': '10px'},
+                                 width=30,
+                                 editable=False)
+        builder.configure_column("2.5 (%)",
+                                 cellStyle={'color': 'red', 'font-size': '10px'},
+                                 width=30,
+                                 editable=False)
+        builder.configure_column("AM (%)",
+                                 cellStyle={'color': 'red', 'font-size': '10px'},
+                                 width=30,
+                                 editable=False)        
         go = builder.build()
 
         AgGrid(stats1,gridOptions = go,
