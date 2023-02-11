@@ -311,7 +311,7 @@ def limpa_e_calcula(liga,ano):
         go = builder.build()
 
         AgGrid(stats1,gridOptions = go,
-        fit_columns_on_grid_load=False,
+        fit_columns_on_grid_load=True,
         theme="alpine",
         columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
         allow_unsafe_jscode=True)
@@ -323,7 +323,7 @@ def limpa_e_calcula(liga,ano):
         go = builder.build()
 
         AgGrid(stats2,gridOptions = go,
-        fit_columns_on_grid_load=False,
+        fit_columns_on_grid_load=True,
         theme="alpine",
         columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
         allow_unsafe_jscode=True)
