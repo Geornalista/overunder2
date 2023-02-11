@@ -312,6 +312,10 @@ def limpa_e_calcula(liga,ano):
                                          editable=False,
                                          sortable=False,
                                          resizable=False)
+        builder.configure_column(" ",
+                                 cellStyle={'color': 'black', 'font-size': '10px'},
+                                 width=50,
+                                 editable=False)        
         builder.configure_column("CLUBE",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
                                  width=100,
