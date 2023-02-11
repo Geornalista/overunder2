@@ -305,7 +305,7 @@ def limpa_e_calcula(liga,ano):
 
         st.title('Aproveitamento por mando (%)')
         
-        st.dataframe(stats1)
+        st.dataframe(stats1,use_container_width=True)
         
         fontsize = '15px'
         builder = GridOptionsBuilder.from_dataframe(stats1)
