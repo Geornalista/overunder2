@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
 import unidecode
-from st_aggrid import AgGrid, GridOptionsBuilder, JsCode,ColumnsAutoSizeMode
 
 st.set_page_config(
   page_title='Favorito segundo as odds - BET365',
@@ -293,7 +292,7 @@ def limpa_e_calcula(liga,ano):
                           round((taxa_cg_o25+taxa_fg_o25)/2),round((taxa_amg_c+taxa_amg_f)/2)])
     
     stats1 = pd.DataFrame(stats1, columns=['CLUBE','0.5','1.5','2.5','AM'],
-                index=['Mandante','Visitante','MÉDIA'])
+                index=['M','V','MÉDIA'])
 
     stats2 = pd.DataFrame(stats2, columns=['CLUBE','0.5','1.5','2.5','AM'],
                 index=['','','MÉDIA'])
@@ -307,63 +306,10 @@ def limpa_e_calcula(liga,ano):
         
         st.dataframe(stats1,use_container_width=True)
         
-        fontsize = '15px'
-        builder = GridOptionsBuilder.from_dataframe(stats1)
-        #builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
-        #                                 filterable=False,
-        #                                 editable=False,
-        #                                 sortable=False,
-        #                                 resizable=False)
-        builder.configure_column(" ",
-                                 cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=30,
-                                 editable=False)        
-        builder.configure_column("CLUBE",
-                                 cellStyle={'color': 'red', 'font-size': fontsize},
-                                 width=50,
-                                 editable=False)
-        builder.configure_column("0.5",
-                                 cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=30,
-                                 editable=False)
-        builder.configure_column("1.5",
-                                 cellStyle={'color': 'red', 'font-size': fontsize},
-                                 width=30,
-                                 editable=False)
-        builder.configure_column("2.5",
-                                 cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=30,
-                                 editable=False)
-        builder.configure_column("AM",
-                                 cellStyle={'color': 'red', 'font-size': fontsize},
-                                 width=30,
-                                 editable=False)        
-        go = builder.build()
-
-        AgGrid(stats1,gridOptions = go,
-        fit_columns_on_grid_load=False,
-        theme="alpine",
-        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
-
         st.title('Aproveitamento por time (%)')
         
-        st.dataframe(stats2)
+        st.dataframe(stats2,use_container_width=True)
         
-        builder = GridOptionsBuilder.from_dataframe(stats2)
-        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '10px'},
-                                         wrapHeaderText=True,
-                                         filterable=False,
-                                         editable=False,
-                                         sortable=False,
-                                         resizable=False)
-
-        go = builder.build()
-
-        AgGrid(stats2,gridOptions = go,
-        fit_columns_on_grid_load=True,
-        theme="alpine",
-        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW)
-
 def figura(df,casa,fora):
     fig, ax = plt.subplots(figsize=(3,3))
     fs = 6
