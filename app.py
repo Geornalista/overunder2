@@ -307,18 +307,17 @@ def limpa_e_calcula(liga,ano):
 
         builder = GridOptionsBuilder.from_dataframe(stats1)
         builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '10px'},
-                                         wrapHeaderText=True,
                                          filterable=False,
                                          editable=False,
                                          sortable=False,
                                          resizable=False)
         builder.configure_column(" ",
                                  cellStyle={'color': 'black', 'font-size': '10px'},
-                                 width=50,
+                                 width=30,
                                  editable=False)        
         builder.configure_column("CLUBE",
                                  cellStyle={'color': 'red', 'font-size': '10px'},
-                                 width=70,
+                                 width=50,
                                  editable=False)
         builder.configure_column("0.5",
                                  cellStyle={'color': 'black', 'font-size': '10px'},
