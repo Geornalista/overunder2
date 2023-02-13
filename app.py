@@ -286,8 +286,8 @@ def limpa_e_calcula(liga,ano):
 
     aprovH = tabH.query('CLUBE == "'+casa+'"')
     aprovA = tabA.query('CLUBE == "'+fora+'"')
-    taxa_H = round(aprovH['APROVEITAMENTO'].tolist()[0],2)
-    taxa_A = round(aprovA['APROVEITAMENTO'].tolist()[0],2)
+    taxa_H = round(aprovH['APROVEITAMENTO'].tolist()[0])
+    taxa_A = round(aprovA['APROVEITAMENTO'].tolist()[0])
     j_H = int(aprovH['JOGOS'].tolist()[0])
     j_A = int(aprovA['JOGOS'].tolist()[0])
 
@@ -301,95 +301,92 @@ def limpa_e_calcula(liga,ano):
     stats2.append(['MÉDIA',round((taxa_cg_o05+taxa_fg_o05)/2),round((taxa_cg_o15+taxa_fg_o15)/2),
                           round((taxa_cg_o25+taxa_fg_o25)/2),round((taxa_amg_c+taxa_amg_f)/2)])
 
-    stats3.append([round(taxa_c_o05),round(taxa_f_o05),round((taxa_c_o05+taxa_f_o05)/2)])
-    stats3.append([round(taxa_c_o15),round(taxa_f_o15),round((taxa_c_o15+taxa_f_o15)/2)])
-    stats3.append([round(taxa_c_o25),round(taxa_f_o25),round((taxa_c_o25+taxa_f_o25)/2)])
-    stats3.append([round(taxa_amg_c),round(taxa_amg_f),round((taxa_amg_c+taxa_amg_f)/2)])
-    stats3.append([taxa_H,taxa_A,round(((taxa_H+taxa_A)/2),2)])
-    stats3.append([j_H,j_A,0])
-
-    stats4.append([round(taxa_cg_o05),round(taxa_fg_o05),round((taxa_cg_o05+taxa_fg_o05)/2)])
-    stats4.append([round(taxa_cg_o15),round(taxa_fg_o15),round((taxa_cg_o15+taxa_fg_o15)/2)])
-    stats4.append([round(taxa_cg_o25),round(taxa_fg_o25),round((taxa_cg_o25+taxa_fg_o25)/2)])
-    stats4.append([round(taxa_amg_c),round(taxa_amg_f),round((taxa_amg_c+taxa_amg_f)/2)])
-
     stats1 = pd.DataFrame(stats1, columns=['CLUBE','0.5','1.5','2.5','AM','APROV','JOGOS'],
                 index=['Mandante','Visitante','MÉDIA'])
 
     stats2 = pd.DataFrame(stats2, columns=['CLUBE','0.5','1.5','2.5','AM'],
                 index=['','','MÉDIA'])
     
-    stats3 = pd.DataFrame(stats3,columns=['Mandante','Visitante','Média'],index=['Over 0.5','Over 1.5','Over 2.5','Ambos Marcam','APROV','JOGOS'])
-    stats4 = pd.DataFrame(stats4,columns=[casa,fora,'Média'],index=['Over 0.5','Over 1.5','Over 2.5','Ambos Marcam'])
-    
     with tab1:
         fontsize = '20px'
         stats1.reset_index(inplace=True)
         stats2.reset_index(inplace=True)
-        stats3.reset_index(inplace=True)
-        stats4.reset_index(inplace=True)
-
         stats1.rename(columns={ stats1.columns[0]: " " }, inplace = True)
         stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
-        stats3.rename(columns={ stats3.columns[0]: " " }, inplace = True)
-        stats4.rename(columns={ stats4.columns[0]: " " }, inplace = True)
 
         st.title('Aproveitamento por mando (%)')
-        builder = GridOptionsBuilder.from_dataframe(stats3)
+        builder = GridOptionsBuilder.from_dataframe(stats1)
         builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
                                          filterable=False,
                                          editable=False,
                                          sortable=False,
                                          resizable=False)
-        builder.configure_column('',
+        builder.configure_column("CLUBE",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=50,
                                  editable=False)
-        builder.configure_column('Mandante',
+        builder.configure_column("0.5",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=50,
+                                 width=30,
                                  editable=False)
-        builder.configure_column('Visitante',
+        builder.configure_column("1.5",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=50,
+                                 width=30,
                                  editable=False)
-        builder.configure_column("Média",
+        builder.configure_column("2.5",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=50,
+                                 width=30,
+                                 editable=False)
+        builder.configure_column("AM",
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=30,
+                                 editable=False)
+        
+        builder.configure_column("APROV",
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=30,
+                                 editable=False)
+        builder.configure_column("JOGOS",
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=30,
                                  editable=False)
         go = builder.build()
 
-        AgGrid(stats3,gridOptions = go,
+        AgGrid(stats1,gridOptions = go,
         fit_columns_on_grid_load=False,
         theme="streamlit",
         columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
 
         st.title('Aproveitamento por time (%)')
-        builder = GridOptionsBuilder.from_dataframe(stats4)
+        builder = GridOptionsBuilder.from_dataframe(stats2)
         builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
                                          filterable=False,
                                          editable=False,
                                          sortable=False,
                                          resizable=False)
-        builder.configure_column("",
+        builder.configure_column("CLUBE",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=50,
                                  editable=False)
-        builder.configure_column(casa,
+        builder.configure_column("0.5",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=50,
+                                 width=30,
                                  editable=False)
-        builder.configure_column(fora,
+        builder.configure_column("1.5",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=50,
+                                 width=30,
                                  editable=False)
-        builder.configure_column('Média',
+        builder.configure_column("2.5",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
-                                 width=50,
+                                 width=30,
+                                 editable=False)
+        builder.configure_column("AM",
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=30,
                                  editable=False)
         go = builder.build()
 
-        AgGrid(stats4,gridOptions = go,
+        AgGrid(stats2,gridOptions = go,
         fit_columns_on_grid_load=False,
         theme="streamlit",
         columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
