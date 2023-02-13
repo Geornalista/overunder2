@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
 import unidecode
+from st_aggrid import AgGrid, GridOptionsBuilder,ColumnsAutoSizeMode
 
 st.set_page_config(
   page_title='Favorito segundo as odds - BET365',
@@ -258,6 +259,8 @@ def limpa_e_calcula(liga,ano):
     
     stats1 = []
     stats2 = []
+    stats3 = []
+    stats4 = []
     textoc = 'Home == "'+casa+'"'
     textof = 'Away == "'+fora+'"'
     textoamc = 'Home == "'+casa+'" | Away == "'+casa+'"'
@@ -281,66 +284,115 @@ def limpa_e_calcula(liga,ano):
     taxa_fg_o25 = 100 * (df_O25.query(textoamf).shape[0] / df.query(textoamf).shape[0])    
     taxa_amg_f = 100 * (df_ambas.query(textoamf).shape[0] / df.query(textoamf).shape[0])
 
-    stats1.append([casa,round(taxa_c_o05),round(taxa_c_o15),round(taxa_c_o25),round(taxa_am_c)])
-    stats1.append([fora,round(taxa_f_o05),round(taxa_f_o15),round(taxa_f_o25),round(taxa_am_f)])
+    aprovH = tabH.query('CLUBE == "'+casa+'"')
+    aprovA = tabA.query('CLUBE == "'+fora+'"')
+    taxa_H = round(aprovH['APROVEITAMENTO'].tolist()[0],2)
+    taxa_A = round(aprovA['APROVEITAMENTO'].tolist()[0],2)
+    j_H = int(aprovH['JOGOS'].tolist()[0])
+    j_A = int(aprovA['JOGOS'].tolist()[0])
+
+    stats1.append([casa,round(taxa_c_o05),round(taxa_c_o15),round(taxa_c_o25),round(taxa_am_c),taxa_H,j_H])
+    stats1.append([fora,round(taxa_f_o05),round(taxa_f_o15),round(taxa_f_o25),round(taxa_am_f),taxa_A,j_A])
     stats1.append(['MÉDIA',round((taxa_c_o05+taxa_f_o05)/2),round((taxa_c_o15+taxa_f_o15)/2),
-                          round((taxa_c_o25+taxa_f_o25)/2),round((taxa_am_c+taxa_am_f)/2)])
+                          round((taxa_c_o25+taxa_f_o25)/2),round((taxa_am_c+taxa_am_f)/2),round(((taxa_H+taxa_A)/2),2),0])
 
     stats2.append([casa,round(taxa_cg_o05),round(taxa_cg_o15),round(taxa_cg_o25),round(taxa_amg_c)])
     stats2.append([fora,round(taxa_fg_o05),round(taxa_fg_o15),round(taxa_fg_o25),round(taxa_amg_f)])
     stats2.append(['MÉDIA',round((taxa_cg_o05+taxa_fg_o05)/2),round((taxa_cg_o15+taxa_fg_o15)/2),
                           round((taxa_cg_o25+taxa_fg_o25)/2),round((taxa_amg_c+taxa_amg_f)/2)])
-    
-    stats1 = pd.DataFrame(stats1, columns=['CLUBE','0.5','1.5','2.5','AM'],
-                index=['M','V','MÉDIA'])
+
+    stats3.append([round(taxa_c_o05),round(taxa_f_o05),round((taxa_c_o05+taxa_f_o05)/2)])
+    stats3.append([round(taxa_c_o15),round(taxa_f_o15),round((taxa_c_o15+taxa_f_o15)/2)])
+    stats3.append([round(taxa_c_o25),round(taxa_f_o25),round((taxa_c_o25+taxa_f_o25)/2)])
+    stats3.append([round(taxa_amg_c),round(taxa_amg_f),round((taxa_amg_c+taxa_amg_f)/2)])
+    stats3.append([taxa_H,taxa_A,round(((taxa_H+taxa_A)/2),2)])
+    stats3.append([j_H,j_A,0])
+
+    stats4.append([round(taxa_cg_o05),round(taxa_fg_o05),round((taxa_cg_o05+taxa_fg_o05)/2)])
+    stats4.append([round(taxa_cg_o15),round(taxa_fg_o15),round((taxa_cg_o15+taxa_fg_o15)/2)])
+    stats4.append([round(taxa_cg_o25),round(taxa_fg_o25),round((taxa_cg_o25+taxa_fg_o25)/2)])
+    stats4.append([round(taxa_amg_c),round(taxa_amg_f),round((taxa_amg_c+taxa_amg_f)/2)])
+
+    stats1 = pd.DataFrame(stats1, columns=['CLUBE','0.5','1.5','2.5','AM','APROV','JOGOS'],
+                index=['Mandante','Visitante','MÉDIA'])
 
     stats2 = pd.DataFrame(stats2, columns=['CLUBE','0.5','1.5','2.5','AM'],
                 index=['','','MÉDIA'])
+    
+    stats3 = pd.DataFrame(stats3,columns=['Mandante','Visitante','Média'],index=['Over 0.5','Over 1.5','Over 2.5','Ambos Marcam','APROV','JOGOS'])
+    stats4 = pd.DataFrame(stats4,columns=[casa,fora,'Média'],index=['Over 0.5','Over 1.5','Over 2.5','Ambos Marcam'])
+    
     with tab1:
-        #stats1.reset_index(inplace=True)
-        #stats2.reset_index(inplace=True)
-        #stats1.rename(columns={ stats1.columns[0]: " " }, inplace = True)
-        #stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
+        fontsize = '20px'
+        stats1.reset_index(inplace=True)
+        stats2.reset_index(inplace=True)
+        stats3.reset_index(inplace=True)
+        stats4.reset_index(inplace=True)
+
+        stats1.rename(columns={ stats1.columns[0]: " " }, inplace = True)
+        stats2.rename(columns={ stats2.columns[0]: " " }, inplace = True)
+        stats3.rename(columns={ stats3.columns[0]: " " }, inplace = True)
+        stats4.rename(columns={ stats4.columns[0]: " " }, inplace = True)
 
         st.title('Aproveitamento por mando (%)')
-        
-        st.dataframe(stats1,use_container_width=True)
-        
+        builder = GridOptionsBuilder.from_dataframe(stats3)
+        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
+                                         filterable=False,
+                                         editable=False,
+                                         sortable=False,
+                                         resizable=False)
+        builder.configure_column('',
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        builder.configure_column('Mandante',
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        builder.configure_column('Visitante',
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        builder.configure_column("Média",
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        go = builder.build()
+
+        AgGrid(stats3,gridOptions = go,
+        fit_columns_on_grid_load=False,
+        theme="streamlit",
+        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
+
         st.title('Aproveitamento por time (%)')
-        
-        st.dataframe(stats2,use_container_width=True)
-        
-def figura(df,casa,fora):
-    fig, ax = plt.subplots(figsize=(3,3))
-    fs = 6
-    ls = 6
+        builder = GridOptionsBuilder.from_dataframe(stats4)
+        builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
+                                         filterable=False,
+                                         editable=False,
+                                         sortable=False,
+                                         resizable=False)
+        builder.configure_column("",
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        builder.configure_column(casa,
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        builder.configure_column(fora,
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        builder.configure_column('Média',
+                                 cellStyle={'color': 'black', 'font-size': fontsize},
+                                 width=50,
+                                 editable=False)
+        go = builder.build()
 
-    df = df.sort_values('TAXA',ascending=True)
-    lista = df.CLUBE.tolist()
-    ncasa = lista.index(casa)
-    nfora = lista.index(fora)
-
-    cor = ["indigo"]*len(lista)
-    cor[ncasa] = "lime"
-    cor[nfora] = "lime"
-    
-    ax.barh(df.CLUBE,df.TAXA,height=0.6,color=cor,edgecolor="k",linewidth=0.3)
-    
-    ax.set_title(dropdown+' - '+gols+' - '+mando+'\n',fontsize=fs)
-    ax.set_facecolor('ivory')
-
-    ax.set_xlim([0, 100])
-    ax.set_xlabel('Aproveitamento %\n')
-    ax.grid(axis='x',color='k',alpha=0.3)
-    ax.tick_params(axis='y', which='major', labelsize=ls)
-    ax.tick_params(axis='x', which='both', labelsize=ls)
-    ax.xaxis.tick_top()
-    ax.xaxis.set_label_position('top')
-
-    plt.xticks(np.arange(0, 110, 10))
-
-    with tab2:
-        st.pyplot(fig)
+        AgGrid(stats4,gridOptions = go,
+        fit_columns_on_grid_load=False,
+        theme="streamlit",
+        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
 
 ligas = ["Alemanha","Alemanha2",
         "Espanha","Espanha2",
