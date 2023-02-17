@@ -3,7 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
 import unidecode
-from st_aggrid import AgGrid, GridOptionsBuilder,ColumnsAutoSizeMode
+import warnings
+warnings.filterwarnings('ignore')
+from st_aggrid import AgGrid, GridOptionsBuilder,ColumnsAutoSizeMode,JsCode
 
 st.set_page_config(
   page_title='Favorito segundo as odds - BET365',
@@ -16,10 +18,9 @@ st.sidebar.header(
 
     """
 )
-
 with open('style.css') as f:
 	st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html = True)
-  
+        
 tab1,tab2 = st.tabs([
                   "📊 ESTATÍSTICAS",
                   "🥅 FAVORITOS"])
@@ -35,7 +36,7 @@ def limpa_e_calcula(liga,ano):
         if liga == 'alemanha':
             ligacod = 'D1'
         if liga == 'alemanha2':
-            ligacod = 'D1'
+            ligacod = 'D2'
         if liga == 'espanha':
             ligacod = 'SP1'
         if liga == 'espanha2':
@@ -321,10 +322,9 @@ def limpa_e_calcula(liga,ano):
         st.title('Aproveitamento por mando (%)')
         builder = GridOptionsBuilder.from_dataframe(stats1)
         builder.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
-                                         filterable=False,
-                                         editable=False,
-                                         sortable=False,
-                                         resizable=False)
+                                         filterable=False,editable=False,
+                                         sortable=False,resizable=False)
+        
         builder.configure_column("CLUBE",
                                  cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=50,
@@ -356,10 +356,28 @@ def limpa_e_calcula(liga,ano):
                                  editable=False)
         go = builder.build()
 
+        jscode = JsCode("""
+            function(params) {
+                if (params.value == 'Mandante') {
+                    return {
+                        'color': 'white',
+                        'backgroundColor': 'darkmagenta',
+                        'fontWeight': 'Bold'
+                }
+                }
+                else{
+                    return{
+                        'backgroundColor': '#3eb84f',
+                        'fontWeight': 'Bold'
+                }
+                }}""")
+
+        go['getRowStyle'] = jscode
         AgGrid(stats1,gridOptions = go,
         fit_columns_on_grid_load=False,
-        theme="streamlit",
-        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
+        theme="alpine",
+        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+        allow_unsafe_jscode=True)
 
         st.title('Aproveitamento por time (%)')
         builder = GridOptionsBuilder.from_dataframe(stats2)
@@ -388,12 +406,31 @@ def limpa_e_calcula(liga,ano):
                                  cellStyle={'color': 'black', 'font-size': fontsize},
                                  width=30,
                                  editable=False)
+        
         go = builder.build()
 
+        jscode = JsCode("""
+            function(params) {
+                if (params.value == 'Senegal') {
+                    return {
+                        'color': 'white',
+                        'backgroundColor': 'darkmagenta',
+                        'fontWeight': 'Bold'
+                }
+                }
+                else{
+                    return{
+                        'backgroundColor': '#3eb84f',
+                        'fontWeight': 'Bold'
+                }
+                }}""")
+
+        go['getRowStyle'] = jscode        
         AgGrid(stats2,gridOptions = go,
         fit_columns_on_grid_load=False,
-        theme="streamlit",
-        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
+        theme="alpine",
+        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+        allow_unsafe_jscode=True)
 
 ligas = ["Alemanha","Alemanha2",
         "Espanha","Espanha2",
