@@ -18,6 +18,7 @@ st.sidebar.header(
 
     """
 )
+
 with open('style.css') as f:
 	st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html = True)
         
@@ -358,7 +359,7 @@ def limpa_e_calcula(liga,ano):
 
         jscode = JsCode("""
             function(params) {
-                if (params.value == 'Mandante') {
+                if (params.data == 'Mandante') {
                     return {
                         'color': 'white',
                         'backgroundColor': 'darkmagenta',
@@ -367,8 +368,7 @@ def limpa_e_calcula(liga,ano):
                 }
                 else{
                     return{
-                        'backgroundColor': '#3eb84f',
-                        'fontWeight': 'Bold'
+                        'backgroundColor': '#838383'
                 }
                 }}""")
 
@@ -420,8 +420,7 @@ def limpa_e_calcula(liga,ano):
                 }
                 else{
                     return{
-                        'backgroundColor': '#3eb84f',
-                        'fontWeight': 'Bold'
+                        'backgroundColor': '#838383'
                 }
                 }}""")
 
