@@ -2,5 +2,4 @@ streamlit
 streamlit-aggrid
 pandas
 unidecode
-numpy
-matplotlib
+openpyxl
