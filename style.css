@@ -1,9 +1,9 @@
 footer {
-  visibility: hidden;
+  visibility: visible;
 }
 
 header {
-  visibility: hidden;
+  visibility: visible;
 }
 .stApp {
   background-color: #b7ffc1;
@@ -34,5 +34,5 @@ div.css-11u7yk6.e1tzin5v0 {
 }
 
 #MainMenu {
-  visibility: hidden;
+  visibility: visible;
   }
