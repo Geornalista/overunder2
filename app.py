@@ -3,7 +3,7 @@ import streamlit as st
 import warnings
 warnings.filterwarnings('ignore')
 import unidecode
-from st_aggrid import AgGrid, GridOptionsBuilder,ColumnsAutoSizeMode
+from st_aggrid import AgGrid, GridOptionsBuilder,ColumnsAutoSizeMode,JsCode
 
 st.set_page_config(
   page_title='Estatísticas Over / Under Gols',
@@ -13,9 +13,11 @@ st.set_page_config(
 with open('style.css') as f:
 	st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html = True)
         
-tab1,tab2 = st.tabs([
-                  "📊 DESEMPENHO COMO MANDANTE",
-                  "🥅 DESEMPENHO COMO VISITANTE"])
+tab1,tab2, tab3, tab4 = st.tabs([
+                  "📊 Over 0.5",
+                  "🥅 Over 1.5",
+                  "📊 Over 2.5",
+                  "🥅 Ambos Marcam"])
 
 liga1 = ['alemanha','alemanha2','espanha','espanha2','franca','franca2',
             'inglaterra','inglaterra2','italia','belgica','holanda','portugal',
@@ -117,6 +119,10 @@ def casa_fora(df):
   
   tabela_H = []
   tabela_A = []
+  tab_05 = []
+  tab_15 = []
+  tab_25 = []
+  tab_am = []
 
   for clube in (clubes):
     casa = 'Home == "'+clube+'"'
@@ -134,13 +140,45 @@ def casa_fora(df):
     tabela_H.append([clube,round(taxa05c,2),round(taxa15c,2),round(taxa25c,2),round(taxaAMc,2)])
     tabela_A.append([clube,round(taxa05f,2),round(taxa15f,2),round(taxa25f,2),round(taxaAMf,2)])
 
+    tab_05.append([clube,round(taxa05c,2),round(taxa05f,2)])
+    tab_15.append([clube,round(taxa15c,2),round(taxa15f,2)])
+    tab_25.append([clube,round(taxa25c,2),round(taxa25f,2)])
+    tab_am.append([clube,round(taxaAMc,2),round(taxaAMf,2)])
+
   tabela_H = pd.DataFrame(tabela_H, columns=['CLUBE','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
   tabela_A = pd.DataFrame(tabela_A, columns=['CLUBE','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
   
-  return tabela_H, tabela_A
+  tab_05 = pd.DataFrame(tab_05,columns=['CLUBE','MANDANTE','VISITANTE'])
+  tab_15 = pd.DataFrame(tab_15,columns=['CLUBE','MANDANTE','VISITANTE'])
+  tab_25 = pd.DataFrame(tab_25,columns=['CLUBE','MANDANTE','VISITANTE'])
+  tab_am = pd.DataFrame(tab_am,columns=['CLUBE','MANDANTE','VISITANTE'])
 
-stats1,stats2 = casa_fora(df)
+  #return tabela_H, tabela_A
+  return tab_05,tab_15,tab_25,tab_am
+
+stats1,stats2,stats3,stats4 = casa_fora(df)
 fontsize = '20px'
+
+jscode = JsCode("""
+            function(params) {
+                if (params.value > '79.99') {
+                    return {
+                        'color': 'white',
+                        'backgroundColor':'#366251',
+                        'fontWeight': 'Bold'
+                    }}
+                if (params.value < '25.01') {
+                    return {
+                        'color': 'red',
+                        'backgroundColor':'#c6beb0',
+                        'fontWeight': 'Bold'
+                    }}
+                if ((params.value > '25.00') || (params.value < '80.01')) {
+                    return {
+                        'color': 'black'
+                    }}  
+            };
+            """)
 
 with tab1: 
     # CSS to inject contained in a string
@@ -153,12 +191,16 @@ with tab1:
     # Inject CSS with Markdown
     st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)    
 
-    st.title('Aproveitamento como Mandante (%)')
+    st.title('Aproveitamento Over 0.5 gols (%)')
     builder1 = GridOptionsBuilder.from_dataframe(stats1)
-    builder1.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
+    builder1.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
-
+    
+    builder1.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+    builder1.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
@@ -178,15 +220,79 @@ with tab2:
     # Inject CSS with Markdown
     st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
     
-    st.title('Aproveitamento como Visitante (%)')
+    st.title('Aproveitamento Over 1.5 gols (%)')
     builder2 = GridOptionsBuilder.from_dataframe(stats2)
-    builder2.configure_default_column(cellStyle={'color': 'black', 'font-size': fontsize},
+    builder2.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
-
+    
+    builder2.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+    builder2.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     go2 = builder2.build()
 
     AgGrid(stats2,gridOptions = go2,
+    fit_columns_on_grid_load=True,
+    theme="alpine",
+    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+    allow_unsafe_jscode=True)
+
+with tab3:
+    # CSS to inject contained in a string
+    hide_dataframe_row_index = """
+            <style>
+            .row_heading.level0 {display:none}
+            .blank {display:none}
+            </style>
+            """
+    # Inject CSS with Markdown
+    st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
+    
+    st.title('Aproveitamento Over 2.5 gols (%)')
+    builder3 = GridOptionsBuilder.from_dataframe(stats3)
+    builder3.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+                                        filterable=False,editable=False,
+                                        sortable=False,resizable=False)
+    
+    builder3.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+    builder3.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+    go3 = builder3.build()
+
+    AgGrid(stats3,gridOptions = go3,
+    fit_columns_on_grid_load=True,
+    theme="alpine",
+    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+    allow_unsafe_jscode=True)
+
+with tab4:
+    # CSS to inject contained in a string
+    hide_dataframe_row_index = """
+            <style>
+            .row_heading.level0 {display:none}
+            .blank {display:none}
+            </style>
+            """
+    # Inject CSS with Markdown
+    st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
+    
+    st.title('Aproveitamento Ambos Marcam (%)')
+    builder4 = GridOptionsBuilder.from_dataframe(stats4)
+    
+    builder4.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+                                        filterable=False,editable=False,
+                                        sortable=False,resizable=False)
+    
+    builder4.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+    builder4.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+    
+    go4 = builder4.build()
+    
+    AgGrid(stats4,gridOptions = go4,
     fit_columns_on_grid_load=True,
     theme="alpine",
     columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
