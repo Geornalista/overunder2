@@ -197,10 +197,10 @@ with tab1:
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
     
-    builder1.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px',width=140)
-    builder1.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px',width=140)
+    builder1.configure_column("MAND",type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,width=140)
+    builder1.configure_column("VIS", type=["numericColumn","numberColumnFilter",
+                "customNumericFormat"], precision=2,cellStyle=jscode,width=140)
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
