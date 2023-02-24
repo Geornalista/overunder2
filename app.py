@@ -198,9 +198,9 @@ with tab1:
                                         sortable=False,resizable=False)
     
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,width=90)
+                "customNumericFormat"], precision=0,cellStyle=jscode,width=90)
     builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,width=90)
+                "customNumericFormat"], precision=0,cellStyle=jscode,width=90)
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
