@@ -197,16 +197,19 @@ with tab1:
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
     
+    builder1.configure_column("CLUBE",width=90)
+
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode,width=90)
     builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode,width=90)
+
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
-    fit_columns_on_grid_load=False,
+    fit_columns_on_grid_load=True,
     theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
+    columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE,
     allow_unsafe_jscode=True)
 
 with tab2:
