@@ -158,6 +158,7 @@ def casa_fora(df):
 
 stats1,stats2,stats3,stats4 = casa_fora(df)
 fontsize = '18px'
+largura_min = 20
 
 jscode = JsCode("""
             function(params) {
@@ -193,7 +194,7 @@ with tab1:
 
     st.title('Aproveitamento Over 0.5 gols (%)')
     builder1 = GridOptionsBuilder.from_dataframe(stats1)
-    builder1.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+    builder1.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False,suppressMenu=True)
     
@@ -228,7 +229,7 @@ with tab2:
     
     st.title('Aproveitamento Over 1.5 gols (%)')
     builder2 = GridOptionsBuilder.from_dataframe(stats2)
-    builder2.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+    builder2.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False,suppressMenu=True)
     
@@ -263,7 +264,7 @@ with tab3:
     
     st.title('Aproveitamento Over 2.5 gols (%)')
     builder3 = GridOptionsBuilder.from_dataframe(stats3)
-    builder3.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+    builder3.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False,suppressMenu=True)
     
@@ -298,7 +299,7 @@ with tab4:
     
     st.title('Aproveitamento Ambos Marcam (%)')
     builder4 = GridOptionsBuilder.from_dataframe(stats4)
-    builder4.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+    builder4.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False,suppressMenu=True)
     
