@@ -194,19 +194,26 @@ with tab1:
     st.title('Aproveitamento Over 0.5 gols (%)')
     builder1 = GridOptionsBuilder.from_dataframe(stats1)
     builder1.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,sortable=False,resizable=False)
-
+                                        filterable=False,editable=False,
+                                        sortable=False,resizable=False,suppressMenu=True)
+    
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
+
     builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
+
+    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
+                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
+                  "transform-origin": '0 0'}}
 
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
-    theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-    allow_unsafe_jscode=True)
+      custom_css=custom_css,
+      theme="alpine",
+      columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE,
+      allow_unsafe_jscode=True)
 
 with tab2:
     # CSS to inject contained in a string
