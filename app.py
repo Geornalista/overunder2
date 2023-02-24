@@ -196,13 +196,11 @@ with tab1:
     builder1.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
-    
-    builder1.configure_column("CLUBE",width=90)
 
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode,width=90)
+                "customNumericFormat"], precision=0,cellStyle=jscode)
     builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode,width=90)
+                "customNumericFormat"], precision=0,cellStyle=jscode)
 
     go1 = builder1.build()
 
