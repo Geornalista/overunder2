@@ -204,14 +204,9 @@ with tab1:
     builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
 
-    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
-                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
-                  "transform-origin": '0 0'}}
-
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
-      custom_css=custom_css,
       theme="alpine",
       columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
       allow_unsafe_jscode=True)
@@ -239,14 +234,9 @@ with tab2:
     builder2.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
 
-    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
-                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
-                  "transform-origin": '0 0'}}
-
     go2 = builder2.build()
 
     AgGrid(stats2,gridOptions = go2,
-      custom_css=custom_css,
       theme="alpine",
       columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
       allow_unsafe_jscode=True)
@@ -274,14 +264,9 @@ with tab3:
     builder3.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
 
-    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
-                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
-                  "transform-origin": '0 0'}}
-
     go3 = builder3.build()
 
     AgGrid(stats3,gridOptions = go3,
-      custom_css=custom_css,
       theme="alpine",
       columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
       allow_unsafe_jscode=True)
@@ -309,14 +294,9 @@ with tab4:
     builder4.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
 
-    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
-                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
-                  "transform-origin": '0 0'}}
-
     go4 = builder4.build()
 
     AgGrid(stats4,gridOptions = go4,
-      custom_css=custom_css,
       theme="alpine",
       columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
       allow_unsafe_jscode=True)
