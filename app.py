@@ -157,7 +157,7 @@ def casa_fora(df):
   return tab_05,tab_15,tab_25,tab_am
 
 stats1,stats2,stats3,stats4 = casa_fora(df)
-fontsize = '20px'
+fontsize = '18px'
 
 jscode = JsCode("""
             function(params) {
@@ -198,13 +198,13 @@ with tab1:
                                         sortable=False,resizable=False)
     
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,width=140)
+                "customNumericFormat"], precision=2,cellStyle=jscode,width=90)
     builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,width=140)
+                "customNumericFormat"], precision=2,cellStyle=jscode,width=90)
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
-    fit_columns_on_grid_load=True,
+    fit_columns_on_grid_load=False,
     theme="alpine",
     columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
     allow_unsafe_jscode=True)
