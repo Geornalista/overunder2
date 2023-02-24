@@ -194,8 +194,7 @@ with tab1:
     st.title('Aproveitamento Over 0.5 gols (%)')
     builder1 = GridOptionsBuilder.from_dataframe(stats1)
     builder1.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False)
+                                        filterable=False,editable=False,sortable=False,resizable=False)
 
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
@@ -205,9 +204,8 @@ with tab1:
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
-    fit_columns_on_grid_load=True,
     theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE,
+    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
     allow_unsafe_jscode=True)
 
 with tab2:
