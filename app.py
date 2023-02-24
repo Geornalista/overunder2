@@ -195,8 +195,7 @@ with tab1:
     st.title('Aproveitamento Over 0.5 gols (%)')
     builder1 = GridOptionsBuilder.from_dataframe(stats1)
     builder1.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False,suppressMenu=True)
+                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
     
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
@@ -208,7 +207,7 @@ with tab1:
 
     AgGrid(stats1,gridOptions = go1,
       theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
       allow_unsafe_jscode=True)
 
 with tab2:
@@ -225,8 +224,7 @@ with tab2:
     st.title('Aproveitamento Over 1.5 gols (%)')
     builder2 = GridOptionsBuilder.from_dataframe(stats2)
     builder2.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False,suppressMenu=True)
+                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
     
     builder2.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
@@ -238,7 +236,7 @@ with tab2:
 
     AgGrid(stats2,gridOptions = go2,
       theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
       allow_unsafe_jscode=True)
 	
 with tab3:
@@ -255,8 +253,7 @@ with tab3:
     st.title('Aproveitamento Over 2.5 gols (%)')
     builder3 = GridOptionsBuilder.from_dataframe(stats3)
     builder3.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False,suppressMenu=True)
+                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
     
     builder3.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
@@ -268,7 +265,7 @@ with tab3:
 
     AgGrid(stats3,gridOptions = go3,
       theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
       allow_unsafe_jscode=True)
 	
 with tab4:
@@ -285,8 +282,7 @@ with tab4:
     st.title('Aproveitamento Ambos Marcam (%)')
     builder4 = GridOptionsBuilder.from_dataframe(stats4)
     builder4.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False,suppressMenu=True)
+                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
     
     builder4.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
@@ -298,5 +294,5 @@ with tab4:
 
     AgGrid(stats4,gridOptions = go4,
       theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
       allow_unsafe_jscode=True)
