@@ -230,20 +230,26 @@ with tab2:
     builder2 = GridOptionsBuilder.from_dataframe(stats2)
     builder2.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
-                                        sortable=False,resizable=False)
+                                        sortable=False,resizable=False,suppressMenu=True)
     
     builder2.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+                "customNumericFormat"], precision=0,cellStyle=jscode)
+
     builder2.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+                "customNumericFormat"], precision=0,cellStyle=jscode)
+
+    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
+                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
+                  "transform-origin": '0 0'}}
+
     go2 = builder2.build()
 
     AgGrid(stats2,gridOptions = go2,
-    fit_columns_on_grid_load=True,
-    theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-    allow_unsafe_jscode=True)
-
+      custom_css=custom_css,
+      theme="alpine",
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+      allow_unsafe_jscode=True)
+	
 with tab3:
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
@@ -259,20 +265,26 @@ with tab3:
     builder3 = GridOptionsBuilder.from_dataframe(stats3)
     builder3.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
-                                        sortable=False,resizable=False)
+                                        sortable=False,resizable=False,suppressMenu=True)
     
     builder3.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+                "customNumericFormat"], precision=0,cellStyle=jscode)
+
     builder3.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+                "customNumericFormat"], precision=0,cellStyle=jscode)
+
+    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
+                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
+                  "transform-origin": '0 0'}}
+
     go3 = builder3.build()
 
     AgGrid(stats3,gridOptions = go3,
-    fit_columns_on_grid_load=True,
-    theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-    allow_unsafe_jscode=True)
-
+      custom_css=custom_css,
+      theme="alpine",
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+      allow_unsafe_jscode=True)
+	
 with tab4:
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
@@ -286,20 +298,24 @@ with tab4:
     
     st.title('Aproveitamento Ambos Marcam (%)')
     builder4 = GridOptionsBuilder.from_dataframe(stats4)
-    
     builder4.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
                                         filterable=False,editable=False,
-                                        sortable=False,resizable=False)
+                                        sortable=False,resizable=False,suppressMenu=True)
     
     builder4.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+                "customNumericFormat"], precision=0,cellStyle=jscode)
+
     builder4.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    
+                "customNumericFormat"], precision=0,cellStyle=jscode)
+
+    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
+                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
+                  "transform-origin": '0 0'}}
+
     go4 = builder4.build()
-    
+
     AgGrid(stats4,gridOptions = go4,
-    fit_columns_on_grid_load=True,
-    theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-    allow_unsafe_jscode=True)
+      custom_css=custom_css,
+      theme="alpine",
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+      allow_unsafe_jscode=True)
