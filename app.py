@@ -198,15 +198,15 @@ with tab1:
                                         sortable=False,resizable=False)
     
     builder1.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px',width=140)
     builder1.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px',width=140)
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
     fit_columns_on_grid_load=True,
     theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
     allow_unsafe_jscode=True)
 
 with tab2:
