@@ -148,10 +148,10 @@ def casa_fora(df):
   tabela_H = pd.DataFrame(tabela_H, columns=['CLUBE','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
   tabela_A = pd.DataFrame(tabela_A, columns=['CLUBE','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
   
-  tab_05 = pd.DataFrame(tab_05,columns=['CLUBE','MANDANTE','VISITANTE'])
-  tab_15 = pd.DataFrame(tab_15,columns=['CLUBE','MANDANTE','VISITANTE'])
-  tab_25 = pd.DataFrame(tab_25,columns=['CLUBE','MANDANTE','VISITANTE'])
-  tab_am = pd.DataFrame(tab_am,columns=['CLUBE','MANDANTE','VISITANTE'])
+  tab_05 = pd.DataFrame(tab_05,columns=['CLUBE','CASA','FORA'])
+  tab_15 = pd.DataFrame(tab_15,columns=['CLUBE','CASA','FORA'])
+  tab_25 = pd.DataFrame(tab_25,columns=['CLUBE','CASA','FORA'])
+  tab_am = pd.DataFrame(tab_am,columns=['CLUBE','CASA','FORA'])
 
   #return tabela_H, tabela_A
   return tab_05,tab_15,tab_25,tab_am
@@ -197,9 +197,9 @@ with tab1:
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
     
-    builder1.configure_column("MAND",type=["numericColumn","numberColumnFilter",
+    builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,width=140)
-    builder1.configure_column("VIS", type=["numericColumn","numberColumnFilter",
+    builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,width=140)
     go1 = builder1.build()
 
@@ -226,9 +226,9 @@ with tab2:
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
     
-    builder2.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
+    builder2.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    builder2.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
+    builder2.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     go2 = builder2.build()
 
@@ -255,9 +255,9 @@ with tab3:
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
     
-    builder3.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
+    builder3.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    builder3.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
+    builder3.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     go3 = builder3.build()
 
@@ -285,9 +285,9 @@ with tab4:
                                         filterable=False,editable=False,
                                         sortable=False,resizable=False)
     
-    builder4.configure_column("MANDANTE",type=["numericColumn","numberColumnFilter",
+    builder4.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    builder4.configure_column("VISITANTE", type=["numericColumn","numberColumnFilter",
+    builder4.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     
     go4 = builder4.build()
