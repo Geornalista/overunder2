@@ -212,7 +212,7 @@ with tab1:
     AgGrid(stats1,gridOptions = go1,
       custom_css=custom_css,
       theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE,
+      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
       allow_unsafe_jscode=True)
 
 with tab2:
