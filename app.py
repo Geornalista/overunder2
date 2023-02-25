@@ -12,12 +12,6 @@ st.set_page_config(
 
 with open('style.css') as f:
 	st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html = True)
-        
-tab1,tab2, tab3, tab4 = st.tabs([
-                  "📊 Over 0.5",
-                  "🥅 Over 1.5",
-                  "📊 Over 2.5",
-                  "🥅 Ambos Marcam"])
 
 liga1 = ['alemanha','alemanha2','espanha','espanha2','franca','franca2',
             'inglaterra','inglaterra2','italia','belgica','holanda','portugal',
@@ -32,72 +26,79 @@ ligas = ['Alemanha','Alemanha2','Espanha','Espanha2','França','França2',
         'Turquia','Grécia','Escócia','Dinamarca','Noruega','Suíça','Suécia',
         'Brasil','Austrália']
 
-liga = st.sidebar.selectbox('Escolha a liga',ligas)
-liga = unidecode.unidecode(liga.lower())
+with st.container():
+  liga = st.selectbox('Escolha a liga',ligas)
+  liga = unidecode.unidecode(liga.lower())
 
-if liga in liga1:
-  if liga == 'alemanha':
-    ligacod = 'D1'
-  if liga == 'alemanha2':
-    ligacod = 'D2'
-  if liga == 'espanha':
-    ligacod = 'SP1'
-  if liga == 'espanha2':
-    ligacod = 'SP2'
-  if liga == 'franca':
-    ligacod = 'F1'
-  if liga == 'franca2':
-    ligacod = 'F2'
-  if liga == 'inglaterra':
-    ligacod = 'E0'
-  if liga == 'inglaterra2':
-    ligacod = 'E1'
-  if liga == 'italia':
-    ligacod = 'I1'
-  if liga == 'italia2':
-    ligacod = 'I2'
-  if liga == 'belgica':
-    ligacod = 'B1'
-  if liga == 'holanda':
-    ligacod = 'N1'
-  if liga == 'portugal':
-    ligacod = 'P1'
-  if liga == 'turquia':
-    ligacod = 'T1'
-  if liga == 'grecia':
-    ligacod = 'G1'
-  if liga == 'escocia':
-    ligacod = 'SC0'
-    
-  link = 'https://www.football-data.co.uk/mmz4281/2223/'+ligacod+'.csv'
-  df = pd.read_csv(link)
-  df = df[['HomeTeam', 'AwayTeam', 'FTHG','FTAG']].copy()
-  df.rename(columns={'HomeTeam':'Home','AwayTeam':'Away','FTHG': 'HG', 'FTAG': 'AG'}, inplace=True)
+  if liga in liga1:
+    if liga == 'alemanha':
+      ligacod = 'D1'
+    if liga == 'alemanha2':
+      ligacod = 'D2'
+    if liga == 'espanha':
+      ligacod = 'SP1'
+    if liga == 'espanha2':
+      ligacod = 'SP2'
+    if liga == 'franca':
+      ligacod = 'F1'
+    if liga == 'franca2':
+      ligacod = 'F2'
+    if liga == 'inglaterra':
+      ligacod = 'E0'
+    if liga == 'inglaterra2':
+      ligacod = 'E1'
+    if liga == 'italia':
+      ligacod = 'I1'
+    if liga == 'italia2':
+      ligacod = 'I2'
+    if liga == 'belgica':
+      ligacod = 'B1'
+    if liga == 'holanda':
+      ligacod = 'N1'
+    if liga == 'portugal':
+      ligacod = 'P1'
+    if liga == 'turquia':
+      ligacod = 'T1'
+    if liga == 'grecia':
+      ligacod = 'G1'
+    if liga == 'escocia':
+      ligacod = 'SC0'
 
-if liga in liga2:
-  if liga == 'dinamarca':
-    link = 'https://www.football-data.co.uk/new/DNK.csv'
-  if liga == 'suica':
-    link = 'https://www.football-data.co.uk/new/SWZ.csv'
-  df = pd.read_csv(link)
-  df = df.query("Season == '2022/2023'")
+    link = 'https://www.football-data.co.uk/mmz4281/2223/'+ligacod+'.csv'
+    df = pd.read_csv(link)
+    df = df[['HomeTeam', 'AwayTeam', 'FTHG','FTAG']].copy()
+    df.rename(columns={'HomeTeam':'Home','AwayTeam':'Away','FTHG': 'HG', 'FTAG': 'AG'}, inplace=True)
 
-if liga in liga3:
-  if liga == 'noruega':
-    link = 'https://www.football-data.co.uk/new/NOR.csv'
-  if liga == 'suecia':
-    link = 'https://www.football-data.co.uk/new/SWE.csv'
-  if liga == 'brasil':
-    link = 'https://www.football-data.co.uk/new/BRA.csv'
-  df = pd.read_csv(link)
-  df = df.query("Season == 2022")
+  if liga in liga2:
+    if liga == 'dinamarca':
+      link = 'https://www.football-data.co.uk/new/DNK.csv'
+    if liga == 'suica':
+      link = 'https://www.football-data.co.uk/new/SWZ.csv'
+    df = pd.read_csv(link)
+    df = df.query("Season == '2022/2023'")
 
-if liga == 'australia':
-    df = pd.read_excel('https://www.aussportsbetting.com/historical_data/a-league.xlsx',skiprows=[0])
-    df = df[['Date','Home Team', 'Away Team', 'Home Goals','Away Goals']].copy()
-    df.rename(columns={'Home Team':'Home','Away Team':'Away','Home Goals': 'HG', 'Away Goals': 'AG'}, inplace=True)
-    df = df.query('Date > "2022-10-01"')
-    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').dt.strftime('%d-%m-%Y')
+  if liga in liga3:
+    if liga == 'noruega':
+      link = 'https://www.football-data.co.uk/new/NOR.csv'
+    if liga == 'suecia':
+      link = 'https://www.football-data.co.uk/new/SWE.csv'
+    if liga == 'brasil':
+      link = 'https://www.football-data.co.uk/new/BRA.csv'
+    df = pd.read_csv(link)
+    df = df.query("Season == 2022")
+
+  if liga == 'australia':
+      df = pd.read_excel('https://www.aussportsbetting.com/historical_data/a-league.xlsx',skiprows=[0])
+      df = df[['Date','Home Team', 'Away Team', 'Home Goals','Away Goals']].copy()
+      df.rename(columns={'Home Team':'Home','Away Team':'Away','Home Goals': 'HG', 'Away Goals': 'AG'}, inplace=True)
+      df = df.query('Date > "2022-10-01"')
+      df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').dt.strftime('%d-%m-%Y')
+
+tab1,tab2, tab3, tab4 = st.tabs([
+                  "📊 Over 0.5",
+                  "🥅 Over 1.5",
+                  "📊 Over 2.5",
+                  "🥅 Ambos Marcam"])
 
 def casa_fora(df):
   clubes = list(df.Home.unique())
@@ -158,7 +159,6 @@ def casa_fora(df):
 
 stats1,stats2,stats3,stats4 = casa_fora(df)
 fontsize = '18px'
-largura_min = 20
 
 jscode = JsCode("""
             function(params) {
@@ -194,8 +194,9 @@ with tab1:
 
     st.title('Aproveitamento Over 0.5 gols (%)')
     builder1 = GridOptionsBuilder.from_dataframe(stats1)
-    builder1.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
+    builder1.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+                                        filterable=False,editable=False,
+                                        sortable=False,resizable=False,suppressMenu=True)
     
     builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
@@ -203,11 +204,16 @@ with tab1:
     builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
                 "customNumericFormat"], precision=0,cellStyle=jscode)
 
+    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
+                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
+                  "transform-origin": '0 0'}}
+
     go1 = builder1.build()
 
     AgGrid(stats1,gridOptions = go1,
+      custom_css=custom_css,
       theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
+      columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE,
       allow_unsafe_jscode=True)
 
 with tab2:
@@ -223,22 +229,22 @@ with tab2:
     
     st.title('Aproveitamento Over 1.5 gols (%)')
     builder2 = GridOptionsBuilder.from_dataframe(stats2)
-    builder2.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
+    builder2.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+                                        filterable=False,editable=False,
+                                        sortable=False,resizable=False)
     
     builder2.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     builder2.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     go2 = builder2.build()
 
     AgGrid(stats2,gridOptions = go2,
-      theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
-      allow_unsafe_jscode=True)
-	
+    fit_columns_on_grid_load=True,
+    theme="alpine",
+    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+    allow_unsafe_jscode=True)
+
 with tab3:
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
@@ -252,22 +258,22 @@ with tab3:
     
     st.title('Aproveitamento Over 2.5 gols (%)')
     builder3 = GridOptionsBuilder.from_dataframe(stats3)
-    builder3.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
+    builder3.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+                                        filterable=False,editable=False,
+                                        sortable=False,resizable=False)
     
     builder3.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     builder3.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     go3 = builder3.build()
 
     AgGrid(stats3,gridOptions = go3,
-      theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
-      allow_unsafe_jscode=True)
-	
+    fit_columns_on_grid_load=True,
+    theme="alpine",
+    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+    allow_unsafe_jscode=True)
+
 with tab4:
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
@@ -281,18 +287,20 @@ with tab4:
     
     st.title('Aproveitamento Ambos Marcam (%)')
     builder4 = GridOptionsBuilder.from_dataframe(stats4)
-    builder4.configure_default_column(min_column_width=largura_min,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,sortable=False,resizable=False,suppressMenu=True)
+    
+    builder4.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
+                                        filterable=False,editable=False,
+                                        sortable=False,resizable=False)
     
     builder4.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
     builder4.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
+                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
+    
     go4 = builder4.build()
-
+    
     AgGrid(stats4,gridOptions = go4,
-      theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.FIT_ALL_COLUMNS_TO_VIEW,
-      allow_unsafe_jscode=True)
+    fit_columns_on_grid_load=True,
+    theme="alpine",
+    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
+    allow_unsafe_jscode=True)
