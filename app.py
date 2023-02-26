@@ -181,7 +181,8 @@ jscode = JsCode("""
             };
             """)
 
-with tab1: 
+with tab1:
+    stats1.sort_values('CLUBE', inplace=True)
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
             <style>
@@ -217,6 +218,7 @@ with tab1:
       allow_unsafe_jscode=True)
 
 with tab2:
+    stats2.sort_values('CLUBE', inplace=True)
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
             <style>
@@ -246,6 +248,7 @@ with tab2:
     allow_unsafe_jscode=True)
 
 with tab3:
+    stats3.sort_values('CLUBE', inplace=True)
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
             <style>
@@ -275,6 +278,7 @@ with tab3:
     allow_unsafe_jscode=True)
 
 with tab4:
+    stats4.sort_values('CLUBE', inplace=True)
     # CSS to inject contained in a string
     hide_dataframe_row_index = """
             <style>
