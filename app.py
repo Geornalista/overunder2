@@ -64,7 +64,7 @@ with st.container():
     if liga == 'escocia':
       ligacod = 'SC0'
 
-    link = 'https://www.football-data.co.uk/mmz4281/2223/'+ligacod+'.csv'
+    link = 'https://www.football-data.co.uk/mmz4281/2324/'+ligacod+'.csv'
     df = pd.read_csv(link)
     df = df[['HomeTeam', 'AwayTeam', 'FTHG','FTAG']].copy()
     df.rename(columns={'HomeTeam':'Home','AwayTeam':'Away','FTHG': 'HG', 'FTAG': 'AG'}, inplace=True)
@@ -75,7 +75,7 @@ with st.container():
     if liga == 'suica':
       link = 'https://www.football-data.co.uk/new/SWZ.csv'
     df = pd.read_csv(link)
-    df = df.query("Season == '2022/2023'")
+    df = df.query("Season == '2023/2024'")
 
   if liga in liga3:
     if liga == 'noruega':
@@ -85,13 +85,13 @@ with st.container():
     if liga == 'brasil':
       link = 'https://www.football-data.co.uk/new/BRA.csv'
     df = pd.read_csv(link)
-    df = df.query("Season == 2022")
+    df = df.query("Season == 2023")
 
   if liga == 'australia':
       df = pd.read_excel('https://www.aussportsbetting.com/historical_data/a-league.xlsx',skiprows=[0])
       df = df[['Date','Home Team', 'Away Team', 'Home Goals','Away Goals']].copy()
       df.rename(columns={'Home Team':'Home','Away Team':'Away','Home Goals': 'HG', 'Away Goals': 'AG'}, inplace=True)
-      df = df.query('Date > "2022-10-01"')
+      df = df.query('Date > "2023-10-01"')
       df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').dt.strftime('%d-%m-%Y')
 
 tab1,tab2, tab3, tab4 = st.tabs([
