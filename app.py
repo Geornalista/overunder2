@@ -3,15 +3,13 @@ import streamlit as st
 import warnings
 warnings.filterwarnings('ignore')
 import unidecode
-from st_aggrid import AgGrid, GridOptionsBuilder,ColumnsAutoSizeMode,JsCode
+from plotly.subplots import make_subplots
+import plotly.graph_objs as go
 
 st.set_page_config(
   page_title='Estatísticas Over / Under Gols',
   page_icon='⚽',
   layout="wide")
-
-with open('style.css') as f:
-	st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html = True)
 
 liga1 = ['alemanha','alemanha2','espanha','espanha2','franca','franca2',
             'inglaterra','inglaterra2','italia','belgica','holanda','portugal',
@@ -26,9 +24,142 @@ ligas = ['Alemanha','Alemanha2','Espanha','Espanha2','França','França2',
         'Turquia','Grécia','Escócia','Dinamarca','Noruega','Suíça','Suécia',
         'Brasil','Austrália']
 
+def calcula(df, texto):
+  # prompt: crie 2 dataframes, a partir do df, CASA e FORA e ordene ambos em ordem decrescente
+
+  tab_casa = df.sort_values(by=['CASA'], ascending=True)
+  tab_fora = df.sort_values(by=['FORA'], ascending=True)
+
+  # prompt: crie 2 gráfico2 de barras com os dataframes tab_casa com o Título "TEXTO - MANDANTE" e tab_fora com o Título "TEXTO - VISITANTE"
+
+  fig = make_subplots(
+      rows=1, cols=2,
+      shared_xaxes=True,
+      vertical_spacing=0.05,
+      horizontal_spacing=0.2,
+      subplot_titles=("MANDANTE","VISITANTE")
+  )
+
+  fig.add_trace(
+      go.Bar(
+          x=tab_casa['CASA'],
+          y=tab_casa['CLUBE'],
+          name="CASA",
+          orientation='h',
+          marker_color='rgb(112, 112, 255)'
+      ),
+      row=1, col=1
+  )
+
+  fig.add_trace(
+      go.Bar(
+          x=tab_fora['FORA'],
+          y=tab_fora['CLUBE'],
+          name="FORA",
+          orientation='h',
+          marker_color='rgb(69, 94, 69)'
+      ),
+      row=1, col=2
+  )
+
+  fig.update_layout(
+     font=dict(
+     size=8,
+     color="Black"
+    ),
+    title=atributo.upper() + ' - ' + liga.upper(),
+      showlegend=False,
+      barmode='group',
+      height=800,
+      width=1200,
+      paper_bgcolor='rgb(255, 255, 255)',
+      plot_bgcolor='rgb(240,240,240)',
+  )
+  
+  st.plotly_chart(fig, use_container_width=True)
+
+def casa_fora(df):
+  clubes = list(df.Home.unique())
+
+  df['GOLS'] = df['HG'] + df['AG']
+  df['AM'] = ((df['HG'] > 0) & (df['AG'] > 0)).astype(int)
+
+  # JOGOS 0X0
+  df_0 = df.query('GOLS < 1')
+
+  # JOGOS OVER 2.5
+  df_O25 = df.query('GOLS > 2.5')
+
+  # JOGOS OVER 1.5
+  df_O15 = df.query('GOLS > 1.5')
+
+  # JOGOS OVER 0.5
+  df_O5 = df.query('GOLS > 0.5')
+
+  # JOGOS AMBAS
+  df_AM = df.query('AM == 1')
+
+  tabela_H = []
+  tabela_A = []
+  tab_0x0 = []
+  tab_05 = []
+  tab_15 = []
+  tab_25 = []
+  tab_am = []
+
+  for clube in (clubes):
+    casa = 'Home == "'+clube+'"'
+    fora = 'Away == "'+clube+'"'
+
+    taxa25c = 100 * (df_O25.query(casa).shape[0] / df.query(casa).shape[0])
+    taxa25f = 100 * (df_O25.query(fora).shape[0] / df.query(fora).shape[0])
+    taxa15c = 100 * (df_O15.query(casa).shape[0] / df.query(casa).shape[0])
+    taxa15f = 100 * (df_O15.query(fora).shape[0] / df.query(fora).shape[0])
+    taxa05c = 100 * (df_O5.query(casa).shape[0] / df.query(casa).shape[0])
+    taxa05f = 100 * (df_O5.query(fora).shape[0] / df.query(fora).shape[0])
+    
+    taxa0x0c = 100 * (df_0.query(casa).shape[0] / df.query(casa).shape[0])
+    taxa0x0f = 100 * (df_0.query(fora).shape[0] / df.query(fora).shape[0])
+
+    taxaAMc = 100 * (df_AM.query(casa).shape[0] / df.query(casa).shape[0])
+    taxaAMf = 100 * (df_AM.query(fora).shape[0] / df.query(fora).shape[0])
+
+    tabela_H.append([clube,round(taxa0x0c,2),round(taxa05c,2),round(taxa15c,2),round(taxa25c,2),round(taxaAMc,2)])
+    tabela_A.append([clube,round(taxa0x0f,2),round(taxa05f,2),round(taxa15f,2),round(taxa25f,2),round(taxaAMf,2)])
+
+    tab_0x0.append([clube,round(taxa0x0c,2),round(taxa0x0f,2)])
+    tab_05.append([clube,round(taxa05c,2),round(taxa05f,2)])
+    tab_15.append([clube,round(taxa15c,2),round(taxa15f,2)])
+    tab_25.append([clube,round(taxa25c,2),round(taxa25f,2)])
+    tab_am.append([clube,round(taxaAMc,2),round(taxaAMf,2)])
+
+  tabela_H = pd.DataFrame(tabela_H, columns=['CLUBE','0x0','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
+  tabela_A = pd.DataFrame(tabela_A, columns=['CLUBE','0x0','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
+
+  tab_0x0 = pd.DataFrame(tab_0x0,columns=['CLUBE','CASA','FORA'])
+  tab_05 = pd.DataFrame(tab_05,columns=['CLUBE','CASA','FORA'])
+  tab_15 = pd.DataFrame(tab_15,columns=['CLUBE','CASA','FORA'])
+  tab_25 = pd.DataFrame(tab_25,columns=['CLUBE','CASA','FORA'])
+  tab_am = pd.DataFrame(tab_am,columns=['CLUBE','CASA','FORA'])
+  
+  if atributo == 'Over 0.5':
+    df1 = tab_05
+  elif atributo == 'Over 1.5':
+    df1 = tab_15
+  elif atributo == 'Over 2.5':
+    df1 = tab_25
+  elif atributo == 'Ambos Marcam':
+    df1 = tab_am
+  else:
+    df1 = tab_0x0
+
+  calcula(df1,atributo)
+
 with st.container():
   liga = st.selectbox('Escolha a liga',ligas)
   liga = unidecode.unidecode(liga.lower())
+
+  atributo = st.selectbox('Escolha o atributo:',('Over 0.5','Over 1.5', 'Over 2.5', 'Ambos Marcam','Jogos 0x0'))
 
   if liga in liga1:
     if liga == 'alemanha':
@@ -94,217 +225,4 @@ with st.container():
       df = df.query('Date > "2023-10-01"')
       df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%y').dt.strftime('%d-%m-%Y')
 
-tab1,tab2, tab3, tab4 = st.tabs([
-                  "📊 Over 0.5",
-                  "🥅 Over 1.5",
-                  "📊 Over 2.5",
-                  "🥅 Ambos Marcam"])
-
-def casa_fora(df):
-  clubes = list(df.Home.unique())
-
-  df['GOLS'] = df['HG'] + df['AG']
-  df['AM'] = ((df['HG'] > 0) & (df['AG'] > 0)).astype(int)
-
-  # JOGOS OVER 2.5
-  df_O25 = df.query('GOLS > 2.5')
-
-  # JOGOS OVER 1.5
-  df_O15 = df.query('GOLS > 1.5')
-
-  # JOGOS OVER 0.5
-  df_O5 = df.query('GOLS > 0.5')
-
-  # JOGOS AMBAS
-  df_AM = df.query('AM == 1')
-  
-  tabela_H = []
-  tabela_A = []
-  tab_05 = []
-  tab_15 = []
-  tab_25 = []
-  tab_am = []
-
-  for clube in (clubes):
-    casa = 'Home == "'+clube+'"'
-    fora = 'Away == "'+clube+'"'
-
-    taxa25c = 100 * (df_O25.query(casa).shape[0] / df.query(casa).shape[0])
-    taxa25f = 100 * (df_O25.query(fora).shape[0] / df.query(fora).shape[0])
-    taxa15c = 100 * (df_O15.query(casa).shape[0] / df.query(casa).shape[0])
-    taxa15f = 100 * (df_O15.query(fora).shape[0] / df.query(fora).shape[0])
-    taxa05c = 100 * (df_O5.query(casa).shape[0] / df.query(casa).shape[0])
-    taxa05f = 100 * (df_O5.query(fora).shape[0] / df.query(fora).shape[0])
-    taxaAMc = 100 * (df_AM.query(casa).shape[0] / df.query(casa).shape[0])
-    taxaAMf = 100 * (df_AM.query(fora).shape[0] / df.query(fora).shape[0])
-
-    tabela_H.append([clube,round(taxa05c,2),round(taxa15c,2),round(taxa25c,2),round(taxaAMc,2)])
-    tabela_A.append([clube,round(taxa05f,2),round(taxa15f,2),round(taxa25f,2),round(taxaAMf,2)])
-
-    tab_05.append([clube,round(taxa05c,2),round(taxa05f,2)])
-    tab_15.append([clube,round(taxa15c,2),round(taxa15f,2)])
-    tab_25.append([clube,round(taxa25c,2),round(taxa25f,2)])
-    tab_am.append([clube,round(taxaAMc,2),round(taxaAMf,2)])
-
-  tabela_H = pd.DataFrame(tabela_H, columns=['CLUBE','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
-  tabela_A = pd.DataFrame(tabela_A, columns=['CLUBE','OVER 0.5','OVER 1.5','OVER 2.5','AMBAS'])
-  
-  tab_05 = pd.DataFrame(tab_05,columns=['CLUBE','CASA','FORA'])
-  tab_15 = pd.DataFrame(tab_15,columns=['CLUBE','CASA','FORA'])
-  tab_25 = pd.DataFrame(tab_25,columns=['CLUBE','CASA','FORA'])
-  tab_am = pd.DataFrame(tab_am,columns=['CLUBE','CASA','FORA'])
-
-  #return tabela_H, tabela_A
-  return tab_05,tab_15,tab_25,tab_am
-
-stats1,stats2,stats3,stats4 = casa_fora(df)
-fontsize = '18px'
-
-jscode = JsCode("""
-            function(params) {
-                if (params.value > '79.99') {
-                    return {
-                        'color': 'white',
-                        'backgroundColor':'#366251',
-                        'fontWeight': 'Bold'
-                    }}
-                if (params.value < '25.01') {
-                    return {
-                        'color': 'red',
-                        'backgroundColor':'#c6beb0',
-                        'fontWeight': 'Bold'
-                    }}
-                if ((params.value > '25.00') || (params.value < '80.01')) {
-                    return {
-                        'color': 'black'
-                    }}  
-            };
-            """)
-
-with tab1:
-    stats1.sort_values('CLUBE', inplace=True)
-    # CSS to inject contained in a string
-    hide_dataframe_row_index = """
-            <style>
-            .row_heading.level0 {display:none}
-            .blank {display:none}
-            </style>
-            """
-    # Inject CSS with Markdown
-    st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)    
-
-    st.title('Aproveitamento Over 0.5 gols (%)')
-    builder1 = GridOptionsBuilder.from_dataframe(stats1)
-    builder1.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False,suppressMenu=True)
-    
-    builder1.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
-    builder1.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=0,cellStyle=jscode)
-
-    custom_css = {".ag-header-cell-text": {"font-size": "12px", 'text-overflow': 'revert;',
-                 'font-weight': 700},".ag-theme-streamlit": {'transform': "scale(0.8)",
-                  "transform-origin": '0 0'}}
-
-    go1 = builder1.build()
-
-    AgGrid(stats1,gridOptions = go1,
-      custom_css=custom_css,
-      theme="alpine",
-      columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE,
-      allow_unsafe_jscode=True)
-
-with tab2:
-    stats2.sort_values('CLUBE', inplace=True)
-    # CSS to inject contained in a string
-    hide_dataframe_row_index = """
-            <style>
-            .row_heading.level0 {display:none}
-            .blank {display:none}
-            </style>
-            """
-    # Inject CSS with Markdown
-    st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
-    
-    st.title('Aproveitamento Over 1.5 gols (%)')
-    builder2 = GridOptionsBuilder.from_dataframe(stats2)
-    builder2.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False)
-    
-    builder2.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    builder2.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    go2 = builder2.build()
-
-    AgGrid(stats2,gridOptions = go2,
-    fit_columns_on_grid_load=True,
-    theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-    allow_unsafe_jscode=True)
-
-with tab3:
-    stats3.sort_values('CLUBE', inplace=True)
-    # CSS to inject contained in a string
-    hide_dataframe_row_index = """
-            <style>
-            .row_heading.level0 {display:none}
-            .blank {display:none}
-            </style>
-            """
-    # Inject CSS with Markdown
-    st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
-    
-    st.title('Aproveitamento Over 2.5 gols (%)')
-    builder3 = GridOptionsBuilder.from_dataframe(stats3)
-    builder3.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False)
-    
-    builder3.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    builder3.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    go3 = builder3.build()
-
-    AgGrid(stats3,gridOptions = go3,
-    fit_columns_on_grid_load=True,
-    theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-    allow_unsafe_jscode=True)
-
-with tab4:
-    stats4.sort_values('CLUBE', inplace=True)
-    # CSS to inject contained in a string
-    hide_dataframe_row_index = """
-            <style>
-            .row_heading.level0 {display:none}
-            .blank {display:none}
-            </style>
-            """
-    # Inject CSS with Markdown
-    st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
-    
-    st.title('Aproveitamento Ambos Marcam (%)')
-    builder4 = GridOptionsBuilder.from_dataframe(stats4)
-    
-    builder4.configure_default_column(min_column_width=5,cellStyle={'color': 'black', 'font-size': fontsize},
-                                        filterable=False,editable=False,
-                                        sortable=False,resizable=False)
-    
-    builder4.configure_column("CASA",type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    builder4.configure_column("FORA", type=["numericColumn","numberColumnFilter",
-                "customNumericFormat"], precision=2,cellStyle=jscode,fontsize='25px')
-    
-    go4 = builder4.build()
-    
-    AgGrid(stats4,gridOptions = go4,
-    fit_columns_on_grid_load=True,
-    theme="alpine",
-    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS,
-    allow_unsafe_jscode=True)
+  casa_fora(df)
